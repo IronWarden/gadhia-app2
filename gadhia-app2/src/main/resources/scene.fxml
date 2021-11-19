@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
+   <children>
+      <HBox layoutX="7.0" layoutY="10.0" prefHeight="380.0" prefWidth="586.0">
+         <children>
+            <TableView fx:id="tableView" prefHeight="378.0" prefWidth="389.0">
+              <columns>
+                <TableColumn fx:id="itemNumber" prefWidth="114.0" text="Serial Number " />
+                <TableColumn fx:id="itemName" minWidth="0.0" prefWidth="134.0" text=" Name" />
+                  <TableColumn fx:id="itemValue" onEditCommit="#editValue" prefWidth="139.0" text="Value" />
+              </columns>
+            </TableView>
+            <VBox prefHeight="380.0" prefWidth="197.0" spacing="50.0">
+               <children>
+                  <TextField alignment="CENTER" promptText="Serial Number">
+                     <VBox.margin>
+                        <Insets top="50.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <TextField alignment="CENTER" promptText="Name" />
+                  <TextField alignment="CENTER" promptText="Value" />
+                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="Add" textAlignment="CENTER" translateX="56.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

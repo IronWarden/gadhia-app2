@@ -1,0 +1,8 @@
+## Project exclude paths
+.gradle/
+.idea/
+grade/wrapper
+/build/
+/build/classes/java/main/
+/build/classes/java/test/
+.DS_Store
