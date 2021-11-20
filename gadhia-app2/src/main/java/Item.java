@@ -11,9 +11,9 @@ public class Item {
     private SimpleStringProperty Value;
 
     public Item(String serialNumber, String Name, String Value){
-        this.setSerialNumber(new SimpleStringProperty(serialNumber));
-        this.setName(new SimpleStringProperty(Name));
-        this.setValue(new SimpleStringProperty(Value));
+        this.setSerialNumber(serialNumber);
+        this.setName(Name);
+        this.setValue(Value);
 
     }
 
@@ -22,24 +22,24 @@ public class Item {
         return serialNumber.get();
     }
 
-    public void setSerialNumber(SimpleStringProperty serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = new SimpleStringProperty(serialNumber);
     }
 
     public String getName() {
         return Name.get();
     }
 
-    public void setName(SimpleStringProperty name) {
-        this.Name = name;
+    public void setName(String name) {
+        this.Name = new SimpleStringProperty(name);
     }
 
     public String getValue() {
         return Value.get();
     }
 
-    public void setValue(SimpleStringProperty value) {
-       this.Value = value;
+    public void setValue(String value) {
+       this.Value = new SimpleStringProperty(value);
     }
 
 

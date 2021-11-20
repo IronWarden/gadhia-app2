@@ -2,6 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -11,29 +15,53 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController">
    <children>
-      <HBox layoutX="7.0" layoutY="10.0" prefHeight="380.0" prefWidth="586.0">
+      <HBox layoutX="7.0" layoutY="5.0" prefHeight="626.0" prefWidth="586.0">
          <children>
-            <TableView fx:id="tableView" prefHeight="378.0" prefWidth="389.0">
+            <TableView fx:id="tableView" prefHeight="322.0" prefWidth="389.0">
               <columns>
-                <TableColumn fx:id="itemNumber" prefWidth="114.0" text="Serial Number " />
-                <TableColumn fx:id="itemName" minWidth="0.0" prefWidth="134.0" text=" Name" />
-                  <TableColumn fx:id="itemValue" onEditCommit="#editValue" prefWidth="139.0" text="Value" />
+                <TableColumn fx:id="itemNumber" onEditCommit="#editSerialNumber" prefWidth="114.0" text="Serial Number " />
+                <TableColumn fx:id="itemName" minWidth="0.0" onEditCommit="#editName" prefWidth="134.0" text=" Name" />
+                  <TableColumn fx:id="itemValue" onEditCommit="#editMonetaryValue" prefWidth="139.0" text="Value" />
               </columns>
             </TableView>
-            <VBox prefHeight="380.0" prefWidth="197.0" spacing="50.0">
+            <VBox prefHeight="394.0" prefWidth="197.0" spacing="50.0">
                <children>
-                  <TextField alignment="CENTER" promptText="Serial Number">
+                  <MenuBar>
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Save" />
+                              <MenuItem mnemonicParsing="false" text="Load" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+                  <TextField fx:id="itemNumberTextField" alignment="CENTER" onAction="#validateSerialNumber" promptText="Serial Number">
                      <VBox.margin>
                         <Insets top="50.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField alignment="CENTER" promptText="Name" />
-                  <TextField alignment="CENTER" promptText="Value" />
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="Add" textAlignment="CENTER" translateX="56.0">
+                  <TextField fx:id="itemNameTextField" alignment="CENTER" onAction="#validateName" promptText="Name" />
+                  <TextField fx:id="itemMonetaryValueTextField" alignment="CENTER" onAction="#validateValue" promptText="Value" />
+                  <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="39.0" prefWidth="74.0" text="Sort" translateX="100.0" translateY="178.0">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="SortByValue" />
+                      <MenuItem mnemonicParsing="false" text="SortBySerialNumber" />
+                        <MenuItem mnemonicParsing="false" text="SortByName" />
+                    </items>
+                  </MenuButton>
+                  <Button mnemonicParsing="false" onAction="#onDelete" prefHeight="34.0" prefWidth="74.0" text="Delete" translateX="100.0" translateY="75.0" />
+                  <Button mnemonicParsing="false" onAction="#onButtonPush" prefHeight="26.0" prefWidth="78.0" text="Add" textAlignment="CENTER">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#onClear" prefHeight="22.0" prefWidth="78.0" text="Clear" translateY="-50.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+                  <TextField translateY="-80.0" />
                </children>
             </VBox>
          </children>
