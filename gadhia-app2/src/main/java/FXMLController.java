@@ -6,6 +6,8 @@
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -14,10 +16,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 
 public class FXMLController implements Initializable {
 
@@ -36,15 +40,17 @@ public class FXMLController implements Initializable {
     TextField itemMonetaryValueTextField;
     @FXML
     TextField itemNameTextField;
+    @FXML
+    TextField filteredField;
 
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // sets up columns
-        itemNumber.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
-        itemName.setCellValueFactory(new PropertyValueFactory<Item, String>("Name"));
-        itemValue.setCellValueFactory(new PropertyValueFactory<Item, String>("Value"));
+        itemNumber.setCellValueFactory(new PropertyValueFactory<>("serialNumber"));
+        itemName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        itemValue.setCellValueFactory(new PropertyValueFactory<>("Value"));
 
         // load data
         tableView.setItems(getItem());
@@ -55,41 +61,55 @@ public class FXMLController implements Initializable {
         itemName.setCellFactory(TextFieldTableCell.forTableColumn());
         itemValue.setCellFactory(TextFieldTableCell.forTableColumn());
 
+
+        // Initalize FilteredList
+        initializeFilteredList();
+
     }
 
-    public void editName(TableColumn.CellEditEvent event) {
+    public void editName(TableColumn.CellEditEvent<Item, String> event) {
         Item item = tableView.getSelectionModel().getSelectedItem();
-        String name = event.getNewValue().toString();
-        if(name.length() < 2 || name.length() > 256) {
+        Edit edit = new Edit();
+
+        // first make sure the name is valid
+        Validate validate = new Validate();
+         boolean match = validate.validateName(event.getNewValue());
+        // if the name is valid we set the name, if match is false we alert the user
+        if(!match) {
             invalidNameAlert();
         }
         else
-            item.setName(event.getNewValue().toString());
+            edit.addEditedItemName(item, event.getNewValue());
     }
 
-    public void editSerialNumber(TableColumn.CellEditEvent event) {
+    public void editSerialNumber(TableColumn.CellEditEvent<Item, String> event) {
         Item item = tableView.getSelectionModel().getSelectedItem();
+        Edit edit = new Edit();
+        // check to see if they match
+        boolean match = edit.editSerialNumber(items, event.getNewValue());
 
-       // iterate through the list of items and if they match we throw an error, else we add it
-        for(Item item1 : items) {
-            if(item1.getSerialNumber().equals(event.getNewValue().toString())) {
-                duplicateAlert();
-            }
-            else
-                item.setSerialNumber(event.getNewValue().toString());
-        }
+        // if they match we can alert the user
+        if(match)
+            duplicateAlert();
+        // else  we can add it
+        else
+            edit.addEditedSerialNumber(item, event.getNewValue());
     }
 
-    public void editMonetaryValue(TableColumn.CellEditEvent event) {
+
+    public void editMonetaryValue(TableColumn.CellEditEvent<Item, String> event) {
         Item item = tableView.getSelectionModel().getSelectedItem();
+        Edit edit = new Edit();
 
+        Validate validate = new Validate();
+        boolean match = validate.validateValue(event.getNewValue());
 
-        String regex = "^[$]+\\d+";
         // if the pattern matches we add
-        if(Pattern.matches(regex, event.getNewValue().toString())) {
-            item.setValue(event.getNewValue().toString());
-        }
+        if(match) {
+            edit.addEditedItemMonetaryValue(item, event.getNewValue());
 
+        }
+        // otherwise, alert the user
         else
             invalidValueAlert();
     }
@@ -136,15 +156,52 @@ public class FXMLController implements Initializable {
     }
 
 
+
+    // handle sorting
+    public void sortListByName() {
+        Edit edit = new Edit();
+        edit.sortListByName(items);
+    }
+
+    public void sortListBySerialNumber() {
+        Edit edit = new Edit();
+        edit.sortListBySerialNumber(items);
+    }
+
+    public void sortListByValue() {
+        Edit edit = new Edit();
+        edit.sortListByValue(items);
+    }
+
+
+
     public void onClear() {
         items.clear();
     }
 
     public void onDelete() {
-        items.remove(tableView.getSelectionModel().getSelectedItem());
+        Edit edit = new Edit();
+        edit.deletingSingleItem(items, tableView.getSelectionModel().getSelectedItem());
     }
 
-    // adding an item to the list
+    public void onSave() {
+        FileChooser fileChooser = new FileChooser();
+        Options options = new Options();
+        // Adding File Name Filters
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("TSV Files", "*.txt"),
+                new FileChooser.ExtensionFilter("HTML Files", "*.html"));
+
+        File saveFile = fileChooser.showSaveDialog(new Stage());
+        if(saveFile != null) {
+            if(saveFile.
+
+        }
+        options.saveFileTSV();
+    }
+
+
+
     ObservableList<Item> items = FXCollections.observableArrayList();
     public ObservableList<Item> getItem() {
 
@@ -154,7 +211,44 @@ public class FXMLController implements Initializable {
 
     }
 
-    // helper functions
+
+
+    public void initializeFilteredList() {
+        // Wrap the ObservableList in a FilteredList display all data
+        FilteredList<Item> filteredData = new FilteredList<>(items, b -> true);
+
+        // set the filter Predicate whenever the filter changes
+        filteredField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(Item -> {
+                // If the filter text is empty, display all persons
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (Item.getSerialNumber().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter match serial number
+                }
+                if(Item.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches item name
+                }
+                else
+                    return false;
+            });
+        });
+
+        // Wrap the Filtered List in a Sorted List
+        SortedList<Item> sortedData = new SortedList<>(filteredData);
+
+        // bind SortedList comparator to the TableView comparator
+        sortedData.comparatorProperty().bind(tableView.comparatorProperty());
+
+        // Add sorted data to the table
+        tableView.setItems(sortedData);
+    }
+
+    // functions for alerting the user
     public void duplicateAlert(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Duplicate Serial Number");

@@ -6,40 +6,41 @@
 import javafx.beans.property.SimpleStringProperty;
 
 public class Item {
-    private SimpleStringProperty serialNumber;
-    private SimpleStringProperty Name;
-    private SimpleStringProperty Value;
+    private String serialNumber;
+    private String name;
+    private String value;
 
-    public Item(String serialNumber, String Name, String Value){
+    // creates an item object
+    public Item(String serialNumber, String name, String value){
         this.setSerialNumber(serialNumber);
-        this.setName(Name);
-        this.setValue(Value);
+        this.setName(name);
+        this.setValue(value);
 
     }
 
 
     public String getSerialNumber() {
-        return serialNumber.get();
+        return serialNumber;
     }
 
     public void setSerialNumber(String serialNumber) {
-        this.serialNumber = new SimpleStringProperty(serialNumber);
+        this.serialNumber = serialNumber;
     }
 
     public String getName() {
-        return Name.get();
+        return name;
     }
 
     public void setName(String name) {
-        this.Name = new SimpleStringProperty(name);
+        this.name = name;
     }
 
     public String getValue() {
-        return Value.get();
+        return value;
     }
 
     public void setValue(String value) {
-       this.Value = new SimpleStringProperty(value);
+       this.value = value;
     }
 
 

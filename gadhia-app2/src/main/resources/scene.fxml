@@ -45,9 +45,9 @@
                   <TextField fx:id="itemMonetaryValueTextField" alignment="CENTER" onAction="#validateValue" promptText="Value" />
                   <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="39.0" prefWidth="74.0" text="Sort" translateX="100.0" translateY="178.0">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="SortByValue" />
-                      <MenuItem mnemonicParsing="false" text="SortBySerialNumber" />
-                        <MenuItem mnemonicParsing="false" text="SortByName" />
+                      <MenuItem mnemonicParsing="false" onAction="#sortListByValue" text="SortByValue" />
+                      <MenuItem mnemonicParsing="false" onAction="#sortListBySerialNumber" text="SortBySerialNumber" />
+                        <MenuItem mnemonicParsing="false" onAction="#sortListByName" text="SortByName" />
                     </items>
                   </MenuButton>
                   <Button mnemonicParsing="false" onAction="#onDelete" prefHeight="34.0" prefWidth="74.0" text="Delete" translateX="100.0" translateY="75.0" />
@@ -61,7 +61,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <TextField translateY="-80.0" />
+                  <TextField fx:id="filteredField" alignment="CENTER" promptText="Search" translateY="-80.0" />
                </children>
             </VBox>
          </children>
