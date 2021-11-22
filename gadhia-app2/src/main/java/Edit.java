@@ -3,13 +3,11 @@
  *  Copyright 2021 Rishi Gadhia
  */
 
-import javafx.collections.FXCollections;
+
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+
 
 // this class will deal with editing components of the item object and tableview such as sorting
 public class Edit {
@@ -37,30 +35,15 @@ public class Edit {
 
 
     public void sortListByName(ObservableList<Item> items) {
-        Collections.sort(items, new Comparator<Item>() {
-            @Override
-            public int compare(Item o1, Item o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        items.sort(Comparator.comparing(Item::getName));
     }
 
     public void sortListBySerialNumber(ObservableList<Item> items) {
-        Collections.sort(items, new Comparator<Item>() {
-            @Override
-            public int compare(Item o1, Item o2) {
-                return o1.getSerialNumber().compareTo(o2.getSerialNumber());
-            }
-        });
+        items.sort(Comparator.comparing(Item::getSerialNumber));
     }
 
     public void sortListByValue(ObservableList<Item> items) {
-        Collections.sort(items, new Comparator<Item>() {
-            @Override
-            public int compare(Item o1, Item o2) {
-                return o1.getValue().compareTo(o2.getValue());
-            }
-        });
+        items.sort(Comparator.comparing(Item::getValue));
     }
 
 

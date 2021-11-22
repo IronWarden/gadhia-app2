@@ -1,0 +1,84 @@
+@startuml
+class InventoryManagementApplication extends Application {
+start()
+
+}
+class FXMLController implements Initializable {
+   'override initialize to set cell factory
+   initialize(URL url, ResourceBundle rb)
+
+   +editName()
+   +editSerialNumber()
+   +editMonetaryValue()
+
+   +validateSerialNumber()
+   +validateName()
+   +validateValue()
+
+   +sortListByName()
+   +sortListBySerialNumber()
+   +sortListByValue()
+
+   addItem()
+   deleteItem()
+   clear()
+   'method to search the list
+   +searchList()
+
+}
+
+FXMLController --o Item
+
+
+class Item {
+'this class will create an inventory item object
+ -private String serialNumber
+ -private String name
+ -private String value
+
+  'an item will have a serialnumber, name, and a value
+  +Item(String serialNumber, String name, String value)
+    'create an item
+
+ + getSerialNumber()
+ +setSerialNumber()
+ +getItemName()
+ +setItemName()
+ +getItemValue()
+ +setItemValue()
+}
+
+FXMLController --o Edit
+
+class Edit {
+'This class will deal with editing components of an item
++editSerialNumber()
+
++addEditedItemName()
++addEditedSerialNumber()
++addEditedItemMonetaryValue()
+
+'sorting should belong with editing because are related
++sortListByName()
++sortListBySerialNumber()
++sortListByValue()
+
+'A single item deletion is also an edit
++deletingSingleItem()
+
+}
+
+FXMLController --o Options
+class Options {
+'this class will deal with options such as saving and loading
+
+ +saveAsTSV()
+ +saveAsHTML()
+ +saveAsJSON()
+ +loadAsTSV()
+ +loadAsHTML()
+ +loadAsJSON()
+
+}
+
+@enduml

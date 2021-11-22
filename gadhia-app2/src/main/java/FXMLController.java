@@ -16,10 +16,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -184,28 +180,12 @@ public class FXMLController implements Initializable {
         edit.deletingSingleItem(items, tableView.getSelectionModel().getSelectedItem());
     }
 
-    public void onSave() {
-        FileChooser fileChooser = new FileChooser();
-        Options options = new Options();
-        // Adding File Name Filters
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("TSV Files", "*.txt"),
-                new FileChooser.ExtensionFilter("HTML Files", "*.html"));
-
-        File saveFile = fileChooser.showSaveDialog(new Stage());
-        if(saveFile != null) {
-            if(saveFile.
-
-        }
-        options.saveFileTSV();
-    }
-
 
 
     ObservableList<Item> items = FXCollections.observableArrayList();
     public ObservableList<Item> getItem() {
 
-        items.add(new Item("0000", "Ronald", "$10"));
+        items.add(new Item("A-12A-JCB-LAS", "Mouse", "$10"));
 
         return items;
 
@@ -218,25 +198,19 @@ public class FXMLController implements Initializable {
         FilteredList<Item> filteredData = new FilteredList<>(items, b -> true);
 
         // set the filter Predicate whenever the filter changes
-        filteredField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(Item -> {
-                // If the filter text is empty, display all persons
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        filteredField.textProperty().addListener((observable, oldValue, newValue) -> filteredData.setPredicate(Item -> {
+            // If the filter text is empty, display all persons
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                if (Item.getSerialNumber().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter match serial number
-                }
-                if(Item.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches item name
-                }
-                else
-                    return false;
-            });
-        });
+            if (Item.getSerialNumber().toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Filter match serial number
+            }
+            return Item.getName().toLowerCase().contains(lowerCaseFilter); // Filter matches item name
+        }));
 
         // Wrap the Filtered List in a Sorted List
         SortedList<Item> sortedData = new SortedList<>(filteredData);
