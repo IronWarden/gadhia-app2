@@ -1,5 +1,9 @@
 # Inventory Management Application By Rishi Gadhia
 
+# Application Demonstration Video
+
+    https://youtu.be/bTc5h0cOuW8
+
 # Adding An Item
 
     To add an item input the item's serial number, name, and  monetary value in the corresponding textfields.
